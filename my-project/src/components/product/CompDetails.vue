@@ -30,7 +30,7 @@
           <div class="aa1">
             <h2>Type</h2>
             <div class="aa2">
-              <button @click="addToBag" class="btn-a">Bắt pokemon</button>
+              <button @click="handleRandom()" class="btn-a">Bắt pokemon</button>
             </div>
           </div>
         </div>
@@ -42,6 +42,13 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div v-if="showEditForm" class="edit-form">
+      <h3>Bạn đã bắt được pokomen hãy đặt tên cho nó !</h3>
+      <input type="text" v-model="editedName" placeholder="Tên mới" />
+      <button @click="saveName">Lưu</button>
+      <button @click="cancelEdit">Hủy</button>
     </div>
   </div>
 </template>
@@ -55,6 +62,8 @@ export default {
   data() {
     return {
       details: null,
+      showEditForm: false,
+      editedName: "",
     };
   },
   mounted() {
@@ -80,13 +89,28 @@ export default {
         });
     },
     ...mapActions(["addToCart"]),
-    addToBag() {
+    handleRandom() {
+      const catchSuccess = Math.random() < 0.5;
+
+      if (catchSuccess) {
+        this.showEditForm = true;
+      } else {
+        alert("Không bắt được Pokémon!");
+      }
+    },
+    saveName() {
       this.addToCart({
         id: this.details.id,
-        name: this.details.name,
+        name: this.editedName,
         image: this.details.image,
         date: new Date().toLocaleString(),
       });
+
+      this.showEditForm = false;
+    },
+
+    cancelEdit() {
+      this.showEditForm = false;
     },
   },
 };
