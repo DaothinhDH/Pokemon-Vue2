@@ -1,7 +1,6 @@
 <template>
   <div class="details">
-    <router-link to="/" class="back-button">⇐ Quay lại</router-link>
-
+    <router-link to="/" class="back-button">Back</router-link>
     <div class="container" v-if="details">
       <div class="label">
         <h2>{{ details.name.toUpperCase() }}</h2>
@@ -29,8 +28,14 @@
 
           <div class="aa1">
             <h2>Type</h2>
+            <button>Grass</button>
+            <button>Poison</button>
             <div class="aa2">
-              <button @click="handleRandom()" class="btn-a">Bắt pokemon</button>
+              <img
+                @click="handleRandom()"
+                src="https://tse4.explicit.bing.net/th?id=OIP.73QAEFCZ5Go_d9q054dD2wHaFv&pid=Api&P=0&h=180"
+                alt=""
+              />
             </div>
           </div>
         </div>
@@ -44,8 +49,16 @@
       </div>
     </div>
 
+    <v-alert
+      v-if="!showEditForm && showAlert"
+      type="error"
+      dismissible
+      @input="showAlert = false"
+      >Không bắt được Pokémon!</v-alert
+    >
+
     <div v-if="showEditForm" class="edit-form">
-      <h3>Bạn đã bắt được pokomen hãy đặt tên cho nó !</h3>
+      <h3>Bạn đã bắt được pokémon, hãy đặt tên cho nó!</h3>
       <input type="text" v-model="editedName" placeholder="Tên mới" />
       <button @click="saveName">Lưu</button>
       <button @click="cancelEdit">Hủy</button>
@@ -54,9 +67,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapActions } from "vuex";
-
+import { fetchPokemonDetails } from "../../api/api";    
 export default {
   name: "Details",
   data() {
@@ -64,6 +76,7 @@ export default {
       details: null,
       showEditForm: false,
       editedName: "",
+      showAlert: false,
     };
   },
   mounted() {
@@ -71,21 +84,13 @@ export default {
   },
   methods: {
     fetchDetails() {
-      axios
-        .get(`https://pokeapi.co/api/v2/pokemon/${this.$route.params.id}`)
-        .then((res) => {
-          const data = res.data;
-          this.details = {
-            id: this.$route.params.id,
-            name: data.name,
-            image: data.sprites.front_default,
-            height: data.height,
-            weight: data.weight,
-            abilities: data.abilities.map((ability) => ability.ability.name),
-          };
+      const id = this.$route.params.id;
+      fetchPokemonDetails(id)
+        .then((details) => {
+          this.details = details;
         })
         .catch((error) => {
-          console.error("Error fetching Pokemon details: ", error);
+          console.error("Lỗi khi tìm thông tin pokemon ", error);
         });
     },
     ...mapActions(["addToCart"]),
@@ -94,8 +99,10 @@ export default {
 
       if (catchSuccess) {
         this.showEditForm = true;
+        this.showAlert = false;
       } else {
-        alert("Không bắt được Pokémon!");
+        this.showEditForm = false;
+        this.showAlert = true;
       }
     },
     saveName() {
@@ -181,10 +188,19 @@ export default {
   padding: 1.5rem;
   color: #ee1a4f;
 }
-
 .aa2 {
-  display: flex;
-  gap: 1rem;
+  margin: 20px;
+}
+.aa2 > img {
+  width: 20%;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  transition: box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.aa2 > img:hover {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 8px 16px;
 }
 
 .aa1 h2 {
@@ -192,10 +208,11 @@ export default {
 }
 
 .aa1 button {
-  color: white;
+  color: rgba(197, 20, 20, 0.788);
+  background-color: rgba(0, 0, 0.5, 0.3);
   padding: 0.5rem;
   border-radius: 5px;
-  border: 1px #6c6868;
+  border-radius: 1px #6c6868;
 }
 
 .aa1 button:hover {

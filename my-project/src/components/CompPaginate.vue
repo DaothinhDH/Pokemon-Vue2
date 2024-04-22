@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div>
     <button @click="previousPage" :disabled="currentPage === 1">
       Previous
@@ -54,4 +54,4 @@ name:"Paginate",
 .pagination-info {
   font-size: 16px;
 }
-</style>
+</style> -->

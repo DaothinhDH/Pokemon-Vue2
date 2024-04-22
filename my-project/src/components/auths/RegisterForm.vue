@@ -1,6 +1,6 @@
 <template>
   <div class="register-form">
-    <router-link to="/" class="back-button">⇐ Quay lại</router-link>
+    <router-link to="/" class="back-button"><i class="fas fa-angle-double-left"></i></router-link>
     <h2>Đăng ký</h2>
     <form @submit.prevent="submitForm" class="form">
       <label class="form-label">Tên người dùng:</label>
@@ -23,7 +23,7 @@ export default {
       password: "",
       error: "",
       success: "",
-    };
+    };  
   },
   methods: {
     submitForm() {

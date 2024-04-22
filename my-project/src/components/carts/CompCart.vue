@@ -1,6 +1,6 @@
 <template>
   <div class="table-container">
-    <router-link to="/" class="back-button">⇐ Quay lại</router-link>
+    <router-link to="/" class="back-button">Quay lại</router-link>
     <table>
       <thead>
         <tr>
@@ -25,7 +25,7 @@
             <button class="action-button" @click="releasePokemon(index)">
               Thả
             </button>
-            <button class="action-bt">Nâng cấp</button>
+            <button class="action-bt">Chiến đấu</button>
           </td>
         </tr>
       </tbody>
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     releasePokemon(index) {
+      alert("ban co chac chan muon xoa");
       this.$store.commit("releasePokemon", index);
     },
   },

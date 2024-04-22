@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Comp-header />
+    <CompHeader />
     <div class="product-list">
       <div
         class="product"
@@ -17,29 +17,31 @@
         </div>
       </div>
     </div>
-    <CompPaginate
-      class="paginate"
-      :current-page="currentPage"
-      :total-pages="totalPages"
-      @page-changed="changePage"
-    ></CompPaginate>
+    <div class="text-center">
+      <v-pagination
+        v-model="page"
+        :length="4"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        class="custom-pagination"
+        @input="changePage"
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import CompPaginate from "../components/CompPaginate.vue";
+import { fetchProducts } from "../api/api";
 import CompHeader from "../components/CompHeader.vue";
 export default {
   name: "List",
   components: {
-    CompPaginate,
     CompHeader,
   },
   data() {
     return {
-      currentPage: 1,
-      itemsPerPage: 12, // Số mục trên mỗi trang
+      page: 1,
+      itemsPerPage: 12,
       products: [],
     };
   },
@@ -48,19 +50,12 @@ export default {
   },
   methods: {
     changePage(page) {
-      this.currentPage = page;
+      this.page = page;
     },
     fetchProducts() {
-      axios
-        .get("https://pokeapi.co/api/v2/pokemon?limit=120&offset=0")
-        .then((response) => {
-          this.products = response.data.results.map((result, index) => ({
-            id: index + 1,
-            name: result.name,
-            image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-              index + 1
-            }.png`,
-          }));
+      fetchProducts()
+        .then((products) => {
+          this.products = products;
         })
         .catch((error) => {
           console.error("Có lỗi khi gọi API", error);
@@ -75,7 +70,7 @@ export default {
       return Math.ceil(this.products.length / this.itemsPerPage);
     },
     paginatedData() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const startIndex = (this.page - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.products.slice(startIndex, endIndex);
     },
@@ -84,10 +79,6 @@ export default {
 </script>
 
 <style scoped>
-.paginate {
-  display: flex;
-  justify-content: center;
-}
 .product-list {
   display: flex;
   flex-wrap: wrap;
@@ -96,17 +87,12 @@ export default {
 }
 .name {
   display: flex;
-  align-content: center;
+  align-items: center;
   justify-content: space-between;
+  margin-top: 10px;
 }
 .product {
   transition: transform 0.3s ease;
-}
-
-.product:hover {
-  transform: translateY(-5px);
-}
-.product {
   width: calc(23% - 20px);
   margin-bottom: 20px;
   padding: 10px;
@@ -120,6 +106,10 @@ export default {
   cursor: pointer;
 }
 
+.product:hover {
+  transform: translateY(-5px);
+}
+
 .product img {
   object-fit: cover;
   width: 80%;
@@ -127,7 +117,7 @@ export default {
   object-fit: cover;
 }
 
-.product h2 {
-  margin-top: 10px;
+.custom-pagination {
+  margin-top: 20px;
 }
 </style>
