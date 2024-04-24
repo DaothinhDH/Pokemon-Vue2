@@ -1,5 +1,6 @@
 <template>
   <div class="details">
+    <Comp-header/>
     <router-link to="/" class="back-button">Back</router-link>
     <div class="container" v-if="details">
       <div class="label">
@@ -43,7 +44,7 @@
         <div class="stats">
           <h2>Stats</h2>
           <div class="chart">
-            <p>1</p>
+            <Bar :pokemon="details.stats" />
           </div>
         </div>
       </div>
@@ -68,18 +69,22 @@
 
 <script>
 import { mapActions } from "vuex";
-import { fetchPokemonDetails } from "../../api/api";    
+import { fetchPokemonDetails } from "../../api/api";
+import CompHeader from '../CompHeader.vue';
+import Bar from "./Bar.vue";
 export default {
   name: "Details",
+  components: { Bar, CompHeader },
   data() {
     return {
       details: null,
       showEditForm: false,
       editedName: "",
       showAlert: false,
+      stats: [],
     };
   },
-  mounted() {
+  created() {
     this.fetchDetails();
   },
   methods: {
@@ -88,6 +93,8 @@ export default {
       fetchPokemonDetails(id)
         .then((details) => {
           this.details = details;
+          this.stats = details.stats;
+          console.log("stats", details);
         })
         .catch((error) => {
           console.error("Lỗi khi tìm thông tin pokemon ", error);
@@ -110,6 +117,7 @@ export default {
         id: this.details.id,
         name: this.editedName,
         image: this.details.image,
+        types: this.details.types,
         date: new Date().toLocaleString(),
       });
 

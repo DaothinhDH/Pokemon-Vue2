@@ -23,7 +23,7 @@ export { fetchProducts };
 
 const fetchPokemonDetails = (id) => {
   return axios
-    .get(`https://pokeapi.co/api/v2/pokemon/${id}`) 
+    .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
     .then((res) => {
       const data = res.data;
       return {
@@ -33,6 +33,8 @@ const fetchPokemonDetails = (id) => {
         height: data.height,
         weight: data.weight,
         abilities: data.abilities.map((ability) => ability.ability.name),
+        types: data.types.map(({ type }) => type.name),
+        stats: data.stats,
       };
     })
     .catch((error) => {
@@ -42,3 +44,23 @@ const fetchPokemonDetails = (id) => {
 };
 
 export { fetchPokemonDetails };
+
+const getTableProduct = () => {
+  return axios
+    .get("https://pokeapi.co/api/v2/pokemon?limit=120&offset=0")
+    .then((response) => {
+      const dataTableProduct = [];
+      response.data.results.forEach((item, index) => {
+        fetchPokemonDetails(index + 1).then((data) => {
+          dataTableProduct.push(data);
+        });
+      });
+      return dataTableProduct;
+    })
+    .catch((error) => {
+      console.error("Có lỗi khi gọi API", error);
+      return [];
+    });
+};
+
+export { getTableProduct };

@@ -3,31 +3,35 @@
     <div class="container">
       <div class="main">
         <div class="content">
-          <h2>Đăng ký</h2>
-          <form @submit.prevent="submitForm" method="post">
+          <h2>Đổi mật khẩu</h2>
+          <form @submit.prevent="handleSubmit" method="post">
             <input
-              v-model="username"
-              type="text"
-              name=""
-              placeholder="Tên đăng nhập"
-              required
-              autofocus=""
-            />
-            <input
-              v-model="password"
+              v-model="oldPassword"
               type="password"
               name=""
-              placeholder="Mật khẩu"
+              placeholder="Mật khẩu cũ"
               required
               autofocus=""
             />
-            <button class="btn" type="submit">Đăng ký</button>
+            <input
+              v-model="newPassword"
+              type="password"
+              name=""
+              placeholder="Mật khẩu mới"
+              required
+              autofocus=""
+            />
+            <input
+              v-model="confirmPassword"
+              type="password"
+              name=""
+              placeholder="Nhập lại mật khẩu mới"
+              required
+              autofocus=""
+            />
+            <button class="btn" type="submit">Đổi mật khẩu</button>
             <div class="error">{{ error }}</div>
           </form>
-          <div class="flex">
-            <router-link to="/login">Đăng nhập</router-link>
-            <router-link to="/">Trở về trang chủ</router-link>
-          </div>
         </div>
       </div>
     </div>
@@ -36,45 +40,52 @@
 
 <script>
 export default {
-  name: "register",
   data() {
     return {
-      username: "",
-      password: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
       error: "",
-      success: "",
     };
   },
   methods: {
-    submitForm() {
-      if (this.username.length < 6)
-        return (this.error = " Tên đăng nhập chưa ít nhất 6 kí tự");
-      if (this.password.length < 6)
-        return (this.error = " Mật khẩu chứa ít nhất 6 kí tự");
+    handleSubmit() {
+      if (!this.oldPassword || !this.newPassword || !this.confirmPassword)
+        return (this.error = "Vui lòng điền đầy đủ các trường");
+      if (
+        this.oldPassword.length < 6 ||
+        this.newPassword.length < 6 ||
+        this.confirmPassword.length < 6
+      )
+        return (this.error = "Mật khẩu chứa ít nhất 6 kí tư");
+      const user = JSON.parse(localStorage.getItem("currentUser"));
+      if (user.password !== this.oldPassword)
+        return (this.error = "Mật khẩu cũ không chính xác");
+
+      if (this.newPassword !== this.confirmPassword)
+        return (this.error = "Mật khẩu xác nhận không khớp");
+
       const newUser = {
-        username: this.username,
-        password: this.password,
+        ...user,
+        password: this.newPassword,
       };
-      let existingUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-      const userExists = existingUsers.some(
-        (user) => user.username === newUser.username
+      const users = JSON.parse(localStorage.getItem("users"));
+      const indexUser = users.findIndex(
+        (item) => item.username === newUser.username
       );
+      users[indexUser] = newUser;
+      localStorage.setItem("users", JSON.stringify(users));
 
-      if (userExists) {
-        this.error = "Tên người dùng đã tồn tại. Vui lòng chọn tên khác.";
-      } else {
-        existingUsers.push(newUser);
-        localStorage.setItem("users", JSON.stringify(existingUsers));
-        this.$toast.open({
-          type: "success",
-          message: "Đăng ký tài khoản thành công",
-          position: "top-right",
-          duration: 2000,
-        });
-        // this.error = "";
-        this.$router.push("/login");
-      }
+      localStorage.setItem("currentUser", JSON.stringify(newUser));
+      this.$toast.open({
+        type: "success",
+        message: "ĐỔi mật khẩu thành công",
+        position: "top-right",
+        duration: 2000,
+      });
+      localStorage.removeItem("currentUser");
+      this.$router.push("/login");
     },
   },
 };
@@ -89,11 +100,7 @@ export default {
   box-sizing: border-box;
   font-family: "poppins", sans-serif;
 }
-.flex {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+
 .login-form {
   position: relative;
   min-height: 100vh;

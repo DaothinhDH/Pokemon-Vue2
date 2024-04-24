@@ -1,6 +1,7 @@
 <template>
   <div class="table-container">
-    <router-link to="/" class="back-button">Quay lại</router-link>
+    <!-- <router-link to="/" class="back-button">Quay lại</router-link> -->
+    <comp-header />
     <table>
       <thead>
         <tr>
@@ -25,7 +26,7 @@
             <button class="action-button" @click="releasePokemon(index)">
               Thả
             </button>
-            <button class="action-bt">Chiến đấu</button>
+            <!-- <button class="action-bt">Nâng cấp</button> -->
           </td>
         </tr>
       </tbody>
@@ -34,7 +35,9 @@
 </template>
 
 <script>
+import CompHeader from "../CompHeader.vue";
 export default {
+  components: { CompHeader },
   name: "CompCart",
   computed: {
     cart() {

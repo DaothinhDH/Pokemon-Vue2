@@ -4,9 +4,14 @@ import router from "./router";
 import store from "./store";
 import Vuetify from "vuetify";
 import "vuetify/dist/vuetify.css";
-
+import ToastPlugin from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-bootstrap.css";
+import VueApexCharts from "vue-apexcharts";
+Vue.use(VueApexCharts);
+Vue.component("apexchart", VueApexCharts);
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
+Vue.use(ToastPlugin);
 
 const vuetify = new Vuetify({
   theme: {
@@ -23,6 +28,7 @@ const vuetify = new Vuetify({
 new Vue({
   el: "#app",
   vuetify,
+  ToastPlugin,
   store,
   router,
   components: { App },

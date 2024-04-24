@@ -1,6 +1,10 @@
 <template>
   <div>
     <CompHeader />
+    <div class="flex">
+      <router-link to="/">dạng lưới</router-link>
+      <router-link to="/Table">dạng bảng</router-link>
+    </div>
     <div class="product-list">
       <div
         class="product"
@@ -33,6 +37,7 @@
 <script>
 import { fetchProducts } from "../api/api";
 import CompHeader from "../components/CompHeader.vue";
+
 export default {
   name: "List",
   components: {
@@ -80,10 +85,28 @@ export default {
 
 <style scoped>
 .product-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 48px 24px 20px;
+}
+
+@media (min-width: 1024px) {
+  .product-list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .product-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .product-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 .name {
   display: flex;
@@ -93,14 +116,12 @@ export default {
 }
 .product {
   transition: transform 0.3s ease;
-  width: calc(23% - 20px);
-  margin-bottom: 20px;
   padding: 10px;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: 10px;
-  background-color: #ceedf32c;
+  background-color: #fff;
   text-align: center;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   color: #504949;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   cursor: pointer;
@@ -113,11 +134,29 @@ export default {
 .product img {
   object-fit: cover;
   width: 80%;
-  height: 210px;
+  height: 180px;
+  max-width: 150px;
   object-fit: cover;
 }
 
 .custom-pagination {
   margin-top: 20px;
+}
+.v-pagination__item--active {
+  background: red !important;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 24px 36px;
+  gap: 24px;
+}
+.flex a {
+  text-decoration: none;
+  background: purple;
+  padding: 8px 10px;
+  color: #fff;
+  border-radius: 8px;
 }
 </style>

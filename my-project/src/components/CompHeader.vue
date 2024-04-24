@@ -1,6 +1,14 @@
-<template >
+<template>
   <div class="header">
-    <h1>GAMES POKEMON</h1>
+    <router-link to="/">
+      <div>
+        <img
+          style="width: 80px; height: 80px; border-radius: 20px"
+          src="https://www.logolynx.com/images/logolynx/2b/2b5580b34909f75e7c9ac7b92ac0c4bf.png"
+          alt=""
+        />
+      </div>
+    </router-link>
     <div class="auth-buttons">
       <template v-if="isLoggedIn">
         <div
@@ -14,14 +22,20 @@
             class="user-icon-img"
           />
           <div class="username">
-            <h2>{{ username }}</h2>
+            <span>{{ username }}</span>
           </div>
           <div class="icons" v-show="showIcons">
-            <router-link to="/cart"
-              ><i class="fa-solid fa-cart-shopping"></i
-            ></router-link>
-            <button @click="logout">
+            <router-link to="/change-pass" class="flex">
+              <span> </span>
+              <span>Đổi mật khẩu</span>
+            </router-link>
+            <router-link to="/cart" class="flex">
+              <span> <i class="fa-solid fa-cart-shopping"></i></span>
+              <span>Giỏ hàng</span>
+            </router-link>
+            <button class="flex" @click="logout">
               <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Đăng xuất</span>
             </button>
           </div>
         </div>
@@ -61,6 +75,12 @@ export default {
       this.isLoggedIn = false;
       this.username = "";
       this.$router.push("/login");
+      this.$toast.open({
+        type: "success",
+        message: "Đăng xuất tài khoản thành công",
+        position: "top-right",
+        duration: 2000,
+      });
     },
   },
 };
@@ -95,6 +115,14 @@ h1 {
   position: relative;
   border-radius: 10px;
 }
+.flex {
+  width: 100%;
+  display: flex;
+  gap: 4px;
+  justify-content: start;
+  cursor: pointer;
+  text-decoration: none;
+}
 
 .user-icon-img {
   width: 40px;
@@ -106,25 +134,26 @@ h1 {
 .username {
   font-weight: bold;
   color: #2e2d27d3;
-  width: 50px;
 }
 
 .icons {
   position: absolute;
   top: 100%;
   left: 50%;
-  width: 80x;
-  height: 40px;
+  width: 200px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   background-color: #decedff8;
   border-radius: 5px;
   padding: 5px;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .avatar:hover .icons {
@@ -139,11 +168,12 @@ h1 {
 
 .button {
   cursor: pointer;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   border-radius: 5px;
-  background-color: antiquewhite;
+  /* background-color: antiquewhite; */
   color: rgba(27, 25, 25, 0.795);
   transition: transform 0.3s ease;
+  text-decoration: none;
 }
 
 .button:hover {
@@ -174,8 +204,17 @@ h1 {
   border-radius: 5px;
   background-color: #fff;
   color: #007bff;
+  margin: 0 10px;
 }
-
+.login-button {
+  background: purple;
+}
+.login-button a {
+  color: #fff;
+}
+.login-button:hover a {
+  color: #000;
+}
 .login-button:hover,
 .register-button:hover {
   background-color: #e5e5e5;

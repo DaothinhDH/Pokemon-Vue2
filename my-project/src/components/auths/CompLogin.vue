@@ -1,14 +1,36 @@
 <template>
   <div class="login-form">
-    <router-link to="/" class="back-button"><i class="fas fa-angle-double-left"></i></router-link>
-    <h2>Đăng nhập</h2>
-    <form @submit.prevent="submitForm" class="form">
-      <label class="form-label">Tên người dùng:</label>
-      <input type="text" v-model="username" required class="form-input" />
-      <label class="form-label">Mật khẩu:</label>
-      <input type="password" v-model="password" required class="form-input" />
-      <button type="submit" class="form-button">Đăng nhập</button>
-    </form>
+    <div class="container">
+      <div class="main">
+        <div class="content">
+          <h2>Đăng nhập</h2>
+          <form @submit.prevent="submitForm" method="post">
+            <input
+              v-model="username"
+              type="text"
+              name=""
+              placeholder="Tên đăng nhập"
+              required
+              autofocus=""
+            />
+            <input
+              v-model="password"
+              type="password"
+              name=""
+              placeholder="Mật khẩu"
+              required
+              autofocus=""
+            />
+            <button class="btn" type="submit">Đăng nhập</button>
+            <div class="error">{{ error }}</div>
+          </form>
+          <div class="flex">
+            <router-link to="/register">Đăng ký tài khoản</router-link>
+            <router-link to="/">Trở về trang chủ</router-link>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -19,10 +41,15 @@ export default {
     return {
       username: "",
       password: "",
+      error: "",
     };
   },
   methods: {
     submitForm() {
+      if (this.username.length < 6)
+        return (this.error = " Tên đăng nhập chưa ít nhất 6 kí tự");
+      if (this.password.length < 6)
+        return (this.error = " Mật khẩu chứa ít nhất 6 kí tự");
       const users = JSON.parse(localStorage.getItem("users")) || [];
 
       const user = users.find(
@@ -31,11 +58,21 @@ export default {
       );
 
       if (user) {
-        alert("Đăng nhập thành công!");
-        localStorage.setItem("currentUser", JSON.stringify(user)); 
+        this.$toast.open({
+          type: "success",
+          message: "Đăng nhập thành công",
+          position: "top-right",
+          duration: 2000,
+        });
+        localStorage.setItem("currentUser", JSON.stringify(user));
         this.$router.push("/");
       } else {
-        alert("Tên người dùng hoặc mật khẩu không chính xác");
+        this.$toast.open({
+          type: "error",
+          message: "Tên người dùng hoặc mật khẩu không chính xác",
+          position: "top-right",
+          duration: 2000,
+        });
       }
     },
   },
@@ -43,72 +80,159 @@ export default {
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "poppins", sans-serif;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .login-form {
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-}
-.back-button {
-  display: inline-block;
-  margin-bottom: 10px;
-  padding: 10px 20px;
-  background-color: #007bffa9;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-}
+  position: relative;
+  min-height: 100vh;
+  z-index: 0;
+  background: white;
+  padding: 30px;
+  justify-content: center;
+  display: grid;
+  font-family: "poppins", sans-serif;
 
-.back-button:hover {
-  background-color: #ac311bb9;
+  grid-template-rows: 1fr auto 1fr;
+  align-items: center;
 }
-.login-form {
-  max-width: 400px;
+.container {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 10px;
-  color: #333;
-  font-weight: bold;
-}
-
-.form-input {
-  width: 95%;
-  padding: 10px;
-  font-size: 16px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.form-button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.login-form h1 {
   text-align: center;
+  font-size: 2.5rem;
+  font-weight: 400;
+  color: #fff;
+  font-family: "poppins", sans-serif;
+}
+.login-form h2 {
+  line-height: 40px;
+  margin-bottom: 5px;
+  font-size: 30px;
+  font-weight: 500;
+  color: #272346;
+  text-align: center;
+}
+.login-form .main {
+  position: relative;
+  display: flex;
+  margin: 30px 0;
+}
+.content {
+  padding: 3em 3em;
+  background: #ddc6b959;
+  box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.form-img {
+  flex-basis: 50%;
+  background: #dfe5ea;
+  background-size: cover;
+  padding: 40px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  align-items: center;
+  display: grid;
+}
+.form-img img {
+  max-width: 100%;
+}
+p {
+  color: #666;
   font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
+  line-height: 25px;
+  opacity: 0.6;
+  text-align: center;
+}
+.btn,
+button,
+input {
+  border-radius: 35px;
+}
+.btn:hover,
+button:hover {
+  color: #272346;
+  transition: 0.5s ease;
+}
+a {
+  text-decoration: none;
+}
+.login-form form {
+  margin: 30px 0;
+}
+.login-form input {
+  outline: none;
+  margin-bottom: 15px;
+  font-stretch: 16px;
+  color: #999;
+  text-align: left;
+  padding: 14px 20px;
+  width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  border: none;
+  background: #f7fafc;
+  transition: 0.3s ease;
+  border: 1px solid transparent;
+}
+.login-form input:focus {
+  background: transparent;
+  border: 1px solid #4e34b6;
 }
 
-.form-button:hover {
-  background-color: #45a049;
+.login-form button {
+  font-size: 18px;
+  color: #fff;
+  width: 100%;
+  background: #4e34b6;
+  border: none;
+  padding: 14px 15px;
+  font-weight: 600;
+  transition: 0.3s ease;
 }
-
-.form-button:disabled {
-  background-color: #bfbfbf;
-  cursor: not-allowed;
+p.account a {
+  color: #4e34b6;
+}
+p.account a:hover {
+  text-decoration: underline;
+}
+@media (max-width: 736px) {
+  .login-form .main {
+    flex-direction: column;
+  }
+  .login-form form {
+    margin-top: 30px;
+    margin-bottom: 10px;
+  }
+  .form-img {
+    border-radius: 0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    order: 2;
+  }
+  .content {
+    order: 1;
+    border-radius: 0;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+}
+.error {
+  color: red;
+  margin-top: 10px;
 }
 </style>
