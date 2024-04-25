@@ -11,7 +11,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(pokemon, index) in cart" :key="index">
+        <tr v-for="(pokemon, index) in cartList" :key="index">
           <td>{{ pokemon.name }}</td>
           <td>{{ pokemon.date }}</td>
           <td>
@@ -22,7 +22,7 @@
             />
           </td>
           <td>
-            <button class="action-button" @click="releasePokemon(index)">
+            <button class="action-button" @click="releasePkm(index)">
               Thả
             </button>
             <!-- <button class="action-bt">Nâng cấp</button> -->
@@ -34,19 +34,18 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import CompHeader from "../CompHeader.vue";
 export default {
   components: { CompHeader },
   name: "CompCart",
   computed: {
-    cart() {
-      return this.$store.state.cart;
-    },
+    ...mapGetters(["cartList"]),
   },
   methods: {
-    releasePokemon(index) {
+    releasePkm(index) {
       alert("ban co chac chan muon xoa");
-      this.$store.commit("releasePokemon", index);
+      this.$store.dispatch("releasePokemon", index);
     },
   },
 };

@@ -28,6 +28,7 @@ export default new Vuex.Store({
     },
     releasePokemon({ commit }, index) {
       commit(RELEASE_POKEMON, index);
+      console.log(index);
     },
   },
   getters: {
