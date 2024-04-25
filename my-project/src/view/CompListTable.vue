@@ -2,8 +2,8 @@
   <div>
     <CompHeader />
     <div class="flex">
-      <a href="/">dạng lưới</a>
-      <a href="/Table">dạng bảng</a>
+      <router-link to="/"><i class="fa-solid fa-bars"></i></router-link>
+      <router-link to="/Table"><i class="fa-solid fa-table"></i></router-link>
     </div>
     <div class="v-card">
       <div class="v-card-title">
@@ -52,7 +52,11 @@
               </template>
             </td>
             <td>
-              <v-btn>Attack</v-btn>
+              <PopupTable
+                class="attrack"
+                :popupVisible="popupVisible"
+                :pokemonList="pokemonList"
+              />
             </td>
           </tr>
         </tbody>
@@ -69,10 +73,6 @@
         ></v-pagination>
       </div>
     </div>
-    <PopupTable
-      :popupVisible="popupVisible"
-      :pokemonList="pokemonList"
-    />
   </div>
 </template>
 
@@ -134,6 +134,12 @@ export default {
 </script>
 
 <style scoped>
+.attrack {
+  width: 100px;
+  height: 80px;
+  margin-top: 39px;
+  padding-left: 85px;
+}
 .v-card {
   margin: 20px;
   padding: 20px;
@@ -190,38 +196,10 @@ export default {
 .type-button,
 .action-button {
   width: 100px;
-  /* border: 1px solid white; */
   border-radius: 7px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 5px 10px;
   border: none;
   cursor: pointer;
 }
-
-/* .v-pagination {
-  margin-top: 20px;
-}
-
-.v-pagination ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.v-pagination ul li {
-  display: inline;
-  margin-right: 5px;
-}
-
-.v-pagination ul li a {
-  text-decoration: none;
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-} */
-
-/* .v-pagination ul li a.active {
-  background-color: #007bff;
-  color: white;
-} */
 </style>

@@ -10,7 +10,6 @@ const fetchProducts = () => {
         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
           index + 1
         }.png`,
-        // abilities: data.abilities.map((ability) => ability.ability.name),
       }));
     })
     .catch((error) => {
@@ -35,7 +34,7 @@ const fetchPokemonDetails = (id) => {
         abilities: data.abilities.map((ability) => ability.ability.name),
         types: data.types.map(({ type }) => type.name),
         stats: data.stats,
-      };
+      }; 
     })
     .catch((error) => {
       console.error("Error fetching Pokemon details: ", error);

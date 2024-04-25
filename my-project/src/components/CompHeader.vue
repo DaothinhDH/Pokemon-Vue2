@@ -1,9 +1,8 @@
 <template>
   <div class="header">
     <router-link to="/">
-      <div>
+      <div class="btn-logo">
         <img
-          style="width: 80px; height: 80px; border-radius: 20px"
           src="https://www.logolynx.com/images/logolynx/2b/2b5580b34909f75e7c9ac7b92ac0c4bf.png"
           alt=""
         />
@@ -98,6 +97,13 @@ export default {
   background-size: 28%;
   background-position: center;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.btn-logo > img {
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 .header > h1 {

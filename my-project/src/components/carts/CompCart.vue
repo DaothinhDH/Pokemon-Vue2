@@ -1,7 +1,6 @@
 <template>
   <div class="table-container">
-    <!-- <router-link to="/" class="back-button">Quay lại</router-link> -->
-    <comp-header />
+    <Comp-header />
     <table>
       <thead>
         <tr>

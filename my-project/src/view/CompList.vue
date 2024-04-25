@@ -2,8 +2,8 @@
   <div>
     <CompHeader />
     <div class="flex">
-      <router-link to="/">dạng lưới</router-link>
-      <router-link to="/Table">dạng bảng</router-link>
+      <router-link to="/"><i class="fa-solid fa-bars"></i></router-link>
+      <router-link to="/Table"><i class="fa-solid fa-table"></i></router-link>
     </div>
     <div class="product-list">
       <div

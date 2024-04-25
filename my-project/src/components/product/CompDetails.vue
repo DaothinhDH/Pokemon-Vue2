@@ -1,68 +1,69 @@
 <template>
-  <div class="details">
-    <Comp-header/>
-    <router-link to="/" class="back-button">Back</router-link>
-    <div class="container" v-if="details">
-      <div class="label">
-        <h2>{{ details.name.toUpperCase() }}</h2>
+  <div>
+    <Comp-header />
+    <div class="details">
+      <div class="container" v-if="details">
+        <div class="label">
+          <h2>{{ details.name.toUpperCase() }}</h2>
+        </div>
+
+        <div class="name">
+          <div class="img">
+            <img :src="details.image" alt="" />
+          </div>
+
+          <div class="box">
+            <div class="box1">
+              <div class="aa">
+                <h4>Height</h4>
+                <span>{{ details.height }}</span>
+                <h4>Weight</h4>
+                <span>{{ details.weight }}</span>
+              </div>
+
+              <div>
+                <h4>Abilities</h4>
+                <span>{{ details.abilities.join(" / ") }}</span>
+              </div>
+            </div>
+
+            <div class="aa1">
+              <h2>Type</h2>
+              <button>Grass</button>
+              <button>Poison</button>
+              <div class="aa2">
+                <img
+                  @click="handleRandom()"
+                  src="https://tse4.explicit.bing.net/th?id=OIP.73QAEFCZ5Go_d9q054dD2wHaFv&pid=Api&P=0&h=180"
+                  alt=""
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="stats">
+            <h2>Stats</h2>
+            <div class="chart">
+              <Bar :pokemon="details.stats" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="name">
-        <div class="img">
-          <img :src="details.image" alt="" />
-        </div>
+      <v-alert
+        v-if="!showEditForm && showAlert"
+        type="error"
+        dismissible
+        @input="showAlert = false"
+        >Không bắt được Pokémon!</v-alert
+      >
 
-        <div class="box">
-          <div class="box1">
-            <div class="aa">
-              <h4>Height</h4>
-              <span>{{ details.height }}</span>
-              <h4>Weight</h4>
-              <span>{{ details.weight }}</span>
-            </div>
-
-            <div>
-              <h4>Abilities</h4>
-              <span>{{ details.abilities.join(" / ") }}</span>
-            </div>
-          </div>
-
-          <div class="aa1">
-            <h2>Type</h2>
-            <button>Grass</button>
-            <button>Poison</button>
-            <div class="aa2">
-              <img
-                @click="handleRandom()"
-                src="https://tse4.explicit.bing.net/th?id=OIP.73QAEFCZ5Go_d9q054dD2wHaFv&pid=Api&P=0&h=180"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="stats">
-          <h2>Stats</h2>
-          <div class="chart">
-            <Bar :pokemon="details.stats" />
-          </div>
-        </div>
+      <div v-if="showEditForm" class="edit-form">
+        <h3>Bạn đã bắt được pokémon, hãy đặt tên cho nó!</h3>
+        <input type="text" v-model="editedName" placeholder="Tên mới" />
+        <button @click="saveName">Lưu</button>
+        <button @click="cancelEdit">Hủy</button>
       </div>
-    </div>
-
-    <v-alert
-      v-if="!showEditForm && showAlert"
-      type="error"
-      dismissible
-      @input="showAlert = false"
-      >Không bắt được Pokémon!</v-alert
-    >
-
-    <div v-if="showEditForm" class="edit-form">
-      <h3>Bạn đã bắt được pokémon, hãy đặt tên cho nó!</h3>
-      <input type="text" v-model="editedName" placeholder="Tên mới" />
-      <button @click="saveName">Lưu</button>
-      <button @click="cancelEdit">Hủy</button>
     </div>
   </div>
 </template>
@@ -70,7 +71,7 @@
 <script>
 import { mapActions } from "vuex";
 import { fetchPokemonDetails } from "../../api/api";
-import CompHeader from '../CompHeader.vue';
+import CompHeader from "../CompHeader.vue";
 import Bar from "./Bar.vue";
 export default {
   name: "Details",
@@ -200,7 +201,7 @@ export default {
   margin: 20px;
 }
 .aa2 > img {
-  width: 20%;
+  width: 15%;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   transition: box-shadow 0.3s ease;
