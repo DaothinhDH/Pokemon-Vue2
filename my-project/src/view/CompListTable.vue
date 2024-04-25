@@ -54,8 +54,8 @@
             <td>
               <PopupTable
                 class="attrack"
-                :popupVisible="popupVisible"
                 :pokemonList="pokemonList"
+                :item="item"
               />
             </td>
           </tr>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 import { getTableProduct } from "../api/api";
 import CompHeader from "../components/CompHeader.vue";
 import PopupTable from "./PopubTable.vue";

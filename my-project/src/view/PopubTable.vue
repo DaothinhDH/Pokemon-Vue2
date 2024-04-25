@@ -46,9 +46,15 @@
   </v-app>
 </template>
 <script>
-import { mapGetters } from "vuex";
-
+import { mapGetters, mapActions } from "vuex";
+import { DOI_DAU } from "../js/pokemon";
 export default {
+  props: {
+    item: {
+      type: Object,
+      default: () => {},
+    },
+  },
   computed: {
     ...mapGetters(["totalItemsInCart", "cartList"]),
   },
@@ -66,22 +72,76 @@ export default {
     };
   },
   created() {
-    this.updatePokemonList();
+    // this.updatePokemonList();
   },
   methods: {
+    ...mapActions({
+      releasePokemon: "releasePokemon",
+    }),
     openPopup() {
       this.popupVisible = true;
     },
     closePopup() {
       this.popupVisible = false;
     },
-    attackPokemon(selectedPokemon) {
-      console.log("Tấn công", selectedPokemon);
+    attackPokemon(attackPokemon) {
+      console.log("Tấn công", attackPokemon);
+      console.log("Phòng thủ", this.item);
+      const defender = this.item;
+      const attackType = attackPokemon.types[0];
+      let attackerAttackStat = attackPokemon.stats.find(
+        (stat) => stat.stat.name === "attack"
+      ).base_stat;
+      const attackerHpStat = attackPokemon.stats.find(
+        (stat) => stat.stat.name === "hp"
+      ).base_stat;
+      const attackerDefenseStat = attackPokemon.stats.find(
+        (stat) => stat.stat.name === "defense"
+      ).base_stat;
+      const defenderType = defender.types[0];
+      const defenderAttackStat = defender.stats.find(
+        (stat) => stat.stat.name === "attack"
+      ).base_stat;
+      const defenderHpStat = defender.stats.find(
+        (stat) => stat.stat.name === "hp"
+      ).base_stat;
+      const defenderDefenseStat = defender.stats.find(
+        (stat) => stat.stat.name === "defense"
+      ).base_stat;
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser) {
+        this.$toast.open({
+          type: "error",
+          message: "Đăng nhập để chơi game",
+          duration: 2000,
+        });
+        return this.$$router.push("/login");
+      }
+      const heSoDamage = DOI_DAU[attackType][defenderType];
+      const finalDamage = attackerAttackStat * heSoDamage;
+      const result = finalDamage - (defenderHpStat + defenderDefenseStat);
+      if (result >= 0) {
+        this.$toast.open({
+          type: "success",
+          message: "Chúc mừng Pokemon của bạn đã chiến thắng !",
+          duration: 2000,
+        });
+      } else {
+        const indexToRemove = this.cartList.findIndex(
+          (item) => item.id === attackPokemon.id
+        );
+        this.releasePokemon(indexToRemove);
+        this.$toast.open({
+          type: "error",
+          message: "Rất tiếc Pokemon của bạn đã bị đánh bại !",
+          duration: 2000,
+        });
+      }
       this.popupVisible = false;
     },
   },
   mounted() {
-    console.log(this.cartList);
+    console.log("item", this.item);
   },
 };
 </script>
