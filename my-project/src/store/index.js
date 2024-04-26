@@ -16,7 +16,7 @@ export default new Vuex.Store({
       state.cart.push(product);
     },
     [RELEASE_POKEMON](state, index) {
-      state.cart.splice(index, 1);
+      state.cart.splice(index, 1);  
     },
     [SET_CART](state, cartData) {
       state.cart = cartData;

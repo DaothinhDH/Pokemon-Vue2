@@ -1,51 +1,78 @@
 <template>
-  <div class="table-container">
-    <Comp-header />
-    <table>
-      <thead>
-        <tr>
-          <th>Tên</th>
-          <th>Ngày bắt được</th>
-          <th>Hình ảnh</th>
-          <th>Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(pokemon, index) in cartList" :key="index">
-          <td>{{ pokemon.name }}</td>
-          <td>{{ pokemon.date }}</td>
-          <td>
-            <img
-              :src="pokemon.image"
-              :alt="pokemon.name"
-              class="pokemon-image"
-            />
-          </td>
-          <td>
-            <button class="action-button" @click="releasePkm(index)">
-              Thả
-            </button>
-            <!-- <button class="action-bt">Nâng cấp</button> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div id="app" data-app>
+    <div class="table-container">
+      <Comp-header />
+      <table>
+        <thead>
+          <tr>
+            <th>Tên</th>
+            <th>Ngày bắt được</th>
+            <th>Hình ảnh</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(pokemon, index) in cartList" :key="index">
+            <td>{{ pokemon.name }}</td>
+            <td>{{ pokemon.date }}</td>
+            <td>
+              <img
+                :src="pokemon.image"
+                :alt="pokemon.name"
+                class="pokemon-image"
+              />
+            </td>
+            <td>
+              <button class="action-button" @click="releasePkm(index)">
+                Thả
+              </button>
+              <!-- <button class="action-bt">Nâng cấp</button> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <v-dialog v-model="confirmDialog" max-width="500px">
+        <v-card>
+          <v-card-title class="headline">Xác nhận</v-card-title>
+          <v-card-text>Bạn có chắc chắn muốn thả pokemon không?</v-card-text>
+          <v-card-actions>
+            <v-btn color="error" text @click="confirmDelete">Đồng ý</v-btn>
+            <v-btn color="primary" text @click="cancelDelete">Hủy</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import CompHeader from "../CompHeader.vue";
+
 export default {
   components: { CompHeader },
   name: "CompCart",
   computed: {
     ...mapGetters(["cartList"]),
   },
+  data() {
+    return {
+      confirmDialog: false,
+      deleteIndex: null,
+    };
+  },
   methods: {
     releasePkm(index) {
-      alert("ban co chac chan muon xoa");
-      this.$store.dispatch("releasePokemon", index);
+      this.deleteIndex = index;
+      this.confirmDialog = true;
+    },
+    confirmDelete() {
+      this.$store.dispatch("releasePokemon", this.deleteIndex);
+      this.confirmDialog = false;
+    },
+    cancelDelete() {
+      this.confirmDialog = false;
     },
   },
 };

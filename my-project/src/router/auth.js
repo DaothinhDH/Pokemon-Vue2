@@ -1,6 +1,6 @@
 import CompLogin from "../components/auths/CompLogin.vue";
 import RegisterForm from "../components/auths/RegisterForm.vue";
-import ChangePassword from "../view/ChangePassword.vue";
+import ChangePassword from "../components/auths/ChangePassword.vue";
 
 export default [
   {

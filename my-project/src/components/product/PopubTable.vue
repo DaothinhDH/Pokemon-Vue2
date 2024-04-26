@@ -47,7 +47,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { DOI_DAU } from "../js/pokemon";
+import { DOI_DAU } from "../../js/pokemon";
 export default {
   props: {
     item: {
@@ -71,9 +71,7 @@ export default {
       pokemonList: [],
     };
   },
-  created() {
-    // this.updatePokemonList();
-  },
+  created() {},
   methods: {
     ...mapActions({
       releasePokemon: "releasePokemon",
@@ -124,7 +122,7 @@ export default {
         this.$toast.open({
           type: "success",
           message: "Chúc mừng Pokemon của bạn đã chiến thắng !",
-          duration: 2000,
+          duration: 3000,
         });
       } else {
         const indexToRemove = this.cartList.findIndex(
@@ -133,8 +131,8 @@ export default {
         this.releasePokemon(indexToRemove);
         this.$toast.open({
           type: "error",
-          message: "Rất tiếc Pokemon của bạn đã bị đánh bại !",
-          duration: 2000,
+          message: "Pokemon của bạn thất bại lập tức sẽ bị biến mất !",
+          duration: 3000,
         });
       }
       this.popupVisible = false;

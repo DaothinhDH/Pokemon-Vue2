@@ -80,7 +80,7 @@
 import { mapActions } from "vuex";
 import { getTableProduct } from "../api/api";
 import CompHeader from "../components/CompHeader.vue";
-import PopupTable from "./PopubTable.vue";
+import PopupTable from "../components/product/PopubTable.vue";
 
 export default {
   components: {

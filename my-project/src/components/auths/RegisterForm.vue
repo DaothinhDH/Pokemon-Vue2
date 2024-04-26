@@ -72,7 +72,6 @@ export default {
           position: "top-right",
           duration: 2000,
         });
-        // this.error = "";
         this.$router.push("/login");
       }
     },

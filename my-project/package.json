@@ -13,16 +13,17 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "apexcharts": "^3.49.0",
     "axios": "^0.25.0",
-    "vue": "^2.5.2",
-    "vue-router": "^3.0.1",
-    "vuetify": "^2.7.2",
-    "vuex": "^3.0.1",
-    "vue-toast-notification": "^1.0.1",
-    "vue-chartjs": "^2.8.7",
     "chart.js": "^2.9.4",
+    "vue": "^2.5.2",
     "vue-apexcharts": "^1.6.2",
-    "apexcharts": "^3.49.0"
+    "vue-chartjs": "^2.8.7",
+    "vue-router": "^3.0.1",
+    "vue-toast-notification": "^1.0.1",
+    "vuetify": "^2.7.2",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

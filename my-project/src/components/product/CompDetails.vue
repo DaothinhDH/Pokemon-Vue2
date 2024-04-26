@@ -130,6 +130,18 @@ export default {
     },
     ...mapActions(["addToCart"]),
     handleRandom() {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+      // Kiểm tra nếu người dùng chưa đăng nhập, hiển thị thông báo và ngăn chặn tiếp tục
+      if (!currentUser) {
+        this.$toast.open({
+          type: "error",
+          message: "Đăng nhập để chơi game",
+          duration: 2000,
+        });
+        return;
+      }
+
       const catchSuccess = Math.random() < 0.5;
 
       if (catchSuccess) {
@@ -154,10 +166,9 @@ export default {
         date: new Date().toLocaleString(),
         ...this.details,
       });
-
+      this.editedName = "";
       this.showEditForm = false;
     },
-
     cancelEdit() {
       this.showEditForm = false;
     },
@@ -169,7 +180,7 @@ export default {
 .details {
   padding-left: 170px;
 }
-.btn{
+.btn {
   display: flex;
   gap: 20px;
 }
@@ -240,7 +251,6 @@ export default {
 .aa2 {
   margin: 20px;
   padding-left: 70px;
-
 }
 .aa2 > img {
   width: 28%;
@@ -258,7 +268,6 @@ export default {
   border: none;
   cursor: pointer;
   color: rgb(249, 250, 247) !important;
-
 }
 .aa2 > img:hover {
   box-shadow: rgba(0, 0, 0, 0.3) 0px 8px 16px;
